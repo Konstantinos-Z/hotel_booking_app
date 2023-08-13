@@ -64,17 +64,20 @@ class SecureCreditCard(CreditCard):
 print(df)
 hotel_ID = input("Enter the id of the hotel: ")
 hotel = Hotel(hotel_ID)
-if hotel.available():
-    credit_card = SecureCreditCard(number="1234")
-    if credit_card.validate(expiration="12/26", holder="JOHN SMITH", cvc="123"):
-        if credit_card.authenticate(given_password="mypass"):
-            hotel.book()
-            name = input("Enter your name: ")
-            reservation_ticket = ReservationTicket(name, hotel)
-            print(reservation_ticket.generate())
+try:
+    if hotel.available():
+        credit_card = SecureCreditCard(number="1234")
+        if credit_card.validate(expiration="12/26", holder="JOHN SMITH", cvc="123"):
+            if credit_card.authenticate(given_password="mypass"):
+                hotel.book()
+                name = input("Enter your name: ")
+                reservation_ticket = ReservationTicket(name, hotel)
+                print(reservation_ticket.generate())
+            else:
+                print("Credit card authentication failed")
         else:
-            print("Credit card authentication failed")
+            print("There was a problem with your payment")
     else:
-        print("There was a problem with your payment")
-else:
-    print("Hotel is not available")
+        print("Hotel is not available")
+except ValueError:
+    print("Invalid hotel ID")
